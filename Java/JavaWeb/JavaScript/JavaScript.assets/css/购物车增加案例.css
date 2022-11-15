@@ -1,0 +1,23 @@
+div {
+	width: 80px;
+}
+
+input[type=text] {
+	width: 50px;
+	height: 44px;
+	outline: none;
+	border: 1px solid #ccc;
+	text-align: center;
+	border-right: 0;
+}
+
+input[type=button] {
+	height: 24px;
+	width: 22px;
+	cursor: pointer;
+}
+
+input {
+	float: left;
+	border: 1px solid #ccc;
+}

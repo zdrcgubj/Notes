@@ -1,0 +1,27 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	border: 1px solid #c0c0c0;
+	width: 500px;
+	margin: 100px auto;
+	text-align: center;
+}
+
+td {
+	border: 1px solid #d0d0d0;
+	color: #404060;
+	padding: 10px;
+}
+
+th {
+	background: #3caee3;
+}
+
+.allCheck {
+	width: 80px;
+}

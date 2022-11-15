@@ -1,0 +1,16 @@
+<style type="text/css">
+    .login{
+        height:163px;
+        width:300px;
+        border:2px solid black;
+        text-align: center;
+        position: absolute;
+        transform: translate(-50%,-61.8%);
+        left: 50%;
+        top:50%;
+        border-radius:8px;
+        background: rgba(220,220,220,0.4);
+
+    }
+
+</style>

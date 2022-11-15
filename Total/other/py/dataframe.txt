@@ -1,0 +1,47 @@
+python改变dataframe的index_Python pandas.DataFrame调整列顺序及修改index名的方法
+
+1. 从字典创建DataFrame
+
+>>> import pandas
+
+>>> dict_a = {'user_id':['webbang','webbang','webbang'],'book_id':['3713327','4074636','26873486'],'rating':['4','4','4'],'mark_date':['2017-03-07','2017-03-07','2017-03-07']}
+
+>>> df = pandas.DataFrame(dict_a) # 从字典创建DataFrame
+
+>>> df # 创建好的df列名默认按首字母顺序排序，和字典中的先后顺序并不一样，字典中是'user_id','book_id','rating','mark_date'
+
+book_id mark_date rating user_id
+
+0 3713327 2017-03-07 4 webbang
+
+1 4074636 2017-03-07 4 webbang
+
+2 26873486 2017-03-07 4 webbang
+
+2. 调整列顺序
+
+>>> df = df[['user_id','book_id','rating','mark_date']] # 调整列顺序为'user_id','book_id','rating','mark_date'
+
+>>> df
+
+user_id book_id rating mark_date
+
+0 webbang 3713327 4 2017-03-07
+
+1 webbang 4074636 4 2017-03-07
+
+2 webbang 26873486 4 2017-03-07
+
+3. 调整index为从1开始
+
+>>> df.index = range(1,len(df) + 1) # 将index改成从1开始
+
+>>> df
+
+user_id book_id rating mark_date
+
+1 webbang 3713327 4 2017-03-07
+
+2 webbang 4074636 4 2017-03-07
+
+3 webbang 26873486 4 2017-03-07
