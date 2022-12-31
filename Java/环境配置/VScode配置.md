@@ -100,6 +100,40 @@ Vscode插件
 
 
 
+``` json
+{
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 500,
+    "workbench.list.smoothScrolling": true,
+    "workbench.startupEditor": "none",
+    "editor.cursorSmoothCaretAnimation": true,
+    "editor.smoothScrolling": true,
+    "editor.cursorBlinking": "smooth",
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true,
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "on",
+    "editor.bracketPairColorization.enabled": true,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.acceptSuggestionOnEnter": "smart",
+    "window.dialogStyle": "custom",
+    "debug.showBreakpointsInOverviewRuler": true,
+    "editor.tabCompletion": "on",
+    "editor.linkedEditing": true,
+    "editor.fontFamily": "楷体, 'Courier New', monospace",
+    "editor.fontSize": 17,
+    "workbench.colorTheme": "One Dark Pro Darker",
+    "liveServer.settings.AdvanceCustomBrowserCmdLine": "",
+    "liveServer.settings.CustomBrowser": "firefox",
+    "liveServer.settings.donotShowInfoMsg": true,
+    "explorer.confirmDragAndDrop": false,
+    "javascript.suggest.enabled": false,
+    "liveServer.settings.port": 5555,
+    "open-in-browser.default": "Chrome",
+    "editor.snippetSuggestions": "top",
+}
+```
+
 
 
 
