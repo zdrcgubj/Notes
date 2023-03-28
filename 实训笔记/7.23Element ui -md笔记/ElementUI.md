@@ -66,13 +66,15 @@ VUE CLI 是一个基于vue.js进行快速开发的完整系统。使用vue脚手
    
 # 6. 配置npm下载依赖位置
    windows：
-      npm config set cache "D:\Program Files\nodereps\npm-cache"
-      npm config set prefix "D:\Program Files\nodereps\npm_global"
+      npm config set cache "D:\Environment\NodeJS\nodereps\npm-cache"
+      npm config set prefix "D:\Environment\NodeJS\nodereps\npm_global"
       
 # 7.验证node.js环境配置
    npm config ls
 # 8.查看vue-clic版本
 vue -V
+# 查看Vue版本：
+npm list vue || npm list vue -g
 ```
 
 vue执行报错：

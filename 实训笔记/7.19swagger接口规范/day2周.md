@@ -6,7 +6,7 @@
 >2. swagger接口文档、登录验证token等等
 >3. vue  element ui  页面
 
-## 2. 《锋迷商城》业务流程设计--接口规范
+## 2. 业务流程设计--接口规范
 
 >在企业项目开发中，当完成项目的需求分析、功能分析、数据库分析和设计之后，项目组就会按照项目中的功能进行开发任务的分配。
 
@@ -29,7 +29,7 @@
 
 **接口规范示例**
 
-参考：《锋迷商城》后端接口说明
+参考：《XX商城》后端接口说明
 
 ### 2.3 swagger
 
@@ -59,6 +59,7 @@
     <version>3.0.0</version>
 </dependency>
 
+<!--swaggerUI-->
 <dependency>
     <groupId>com.github.xiaoymin</groupId>
     <artifactId>swagger-bootstrap-ui</artifactId>
@@ -69,48 +70,73 @@
 2. 在项目中添加swagger配置（java配置）
 
 ```java
-package org.qf.config;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author Liu
+ * @create 2023-02-25-10:08
+ * swagger配置类
+ * `@Api`类注解，在控制器类添加此注解，可以对控制器类进行功能说明
+ * `@ApiOperation` 方法注解:说明接口方法的作用
+ * `@ApiIgnore` 接口方法注解，添加此注解的方法将不会生成到接口文档中
+ * `@ApiImplicitParams`和`@ApiImplicitParam`方法注解，说明接口方法的参数
+ * @Api(value = "提供了图书查询,添加相关的接口",tags = "书籍管理")
+ * @ApiOperation("员工查询接口")
+ * @ApiImplicitParams(
+ *         @ApiImplicitParam(dataType = "string",name = "key",value = "查询条件为空,则查询所有",required = false)
+ *     )
+ */
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig {
+public class Swaggerconfig {
+    //controller所属包
+    private String basePackage = "com.yx.share.game.controller";
 
-    /**
-     * swagger帮助我们生成接口文档
-     * 1. 配置生成的文档信息
-     * 2. 配置生成规则
-     * @return
-     */
     @Bean
-    public Docket getDocket(){
+    public Docket getDocket() {
         //创建封面信息对象
-        ApiInfoBuilder apiInfoBuilder=new ApiInfoBuilder();
-        apiInfoBuilder.title("《锋迷商城》后端接口说明")
-                .description("此文档详细说明了锋迷商城项目后端接口规范....")
-                .version("v 2.0.1")
-                .contact(new Contact("建哥","www.liujian.com","2414561093@qq.com"));
-        ApiInfo apiInfo=apiInfoBuilder.build();
-        Docket docket=new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo)  //指定生成的文档中的封面信息：文档标题  版本  作者
+        ApiInfoBuilder apiInfoBuilder = new ApiInfoBuilder();
+        apiInfoBuilder.title("XXXX后端接口说明书")
+                .description("此文档详细说明了XXXX项目后端的接口规范")
+                .version("v2.0.1")
+                .contact(new Contact("aurora", "www.auws.com", "24561251@qq.com"));
+        ApiInfo apiInfo = apiInfoBuilder.build();
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("org.qf.web"))
-                .paths(PathSelectors.any())
-                .build();
-
+                .apis(RequestHandlerSelectors.basePackage(basePackage))
+                .build()
+                .globalOperationParameters(getParameterList());
         return docket;
     }
 
+    //生成token,解决访问问题
+    public List<Parameter> getParameterList() {
+        ParameterBuilder parameterBuilder = new ParameterBuilder();
+        List<Parameter> list = new ArrayList<>();
+        final Parameter parameter = parameterBuilder.name("token")
+                .description("令牌")
+                .modelRef(new ModelRef("string"))
+                .parameterType("header")
+                .required(false)
+                .build();
+        list.add(parameter);
+        return list;
+    }
 }
 ```
 
@@ -150,7 +176,104 @@ public class SwaggerConfig {
 
 `@ApiIgnore` 接口方法注解，添加此注解的方法将不会生成到接口文档中
 
-## 3. 《锋迷商城》设计及实现——用户管理
+@RestController
+@RequestMapping("/book")
+@CrossOrigin
+@Api(tags = "图书信息管理接口")
+public class BookController {
+
+```java
+@Resource
+private BookService bookService;
+
+//id 通过url传递
+//name 通过url参数传递
+//book 通过data传递
+//token  通过header传递
+@RequestMapping(value = "/test/{id}",method = RequestMethod.POST)
+@ApiIgnore
+public ResultVO test(@PathVariable("id") Integer id,
+                     @RequestParam("name") String name,
+                     @RequestBody Book book,
+                     HttpServletRequest request){
+    
+    //获取header传递的数据
+    String token = request.getHeader("token");
+    System.out.println(token);
+    return new ResultVO(0,"success");
+}
+
+@RequestMapping(value = "/add",method = RequestMethod.POST)
+@ApiOperation(value = "添加图书信息",notes = "调用此接口的注意事项")
+public ResultVO saveBook(@RequestBody Book book)  {
+    try {
+        bookService.insert(book);
+        return new ResultVO<Book>(0,"success",book);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ResultVO<Book>(1,"fail",null);
+    }
+}
+
+@RequestMapping(value = "/{id}",method = RequestMethod.DELETE)
+@ApiOperation(value = "删除图书信息",notes = "调用此接口的注意事项")
+@ApiImplicitParam(paramType = "path", name = "id",value = "要删除的图书ID",required = true,dataType = "int")
+/**
+ * paramType取值: header   query(url?id=123)   path(book/123)
+ */
+public ResultVO deleteBook(@PathVariable("id") Integer bookId){
+    try {
+        bookService.delete(bookId);
+        return new ResultVO<Integer>(0,"success",bookId);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ResultVO<Book>(1,"fail");
+    }
+}
+
+@RequestMapping(value = "/update",method = RequestMethod.PUT)
+public ResultVO updateBook(@RequestBody Book book)  {
+    try {
+        bookService.update(book);
+        return new ResultVO<Book>(0,"success",book);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ResultVO<Book>(1,"fail");
+    }
+}
+
+@RequestMapping(value = "/{id}",method = RequestMethod.GET)
+public ResultVO getBook(@PathVariable("id")Integer bookId){
+    try {
+        Book book = bookService.getById(bookId);
+        return new ResultVO<Book>(0,"success",book);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ResultVO<Book>(1,"fail");
+    }
+}
+
+@RequestMapping(value="/list",method = RequestMethod.GET)
+@ApiOperation(value = "查询图书信息列表",notes = "调用此接口的注意事项")
+@ApiImplicitParams({
+        @ApiImplicitParam(paramType = "query", name = "pageNum",value = "页码",required = true,dataType = "int"),
+        @ApiImplicitParam(paramType = "query", name = "pageSize",value = "每页条数",required = true,dataType = "int")
+})
+public ResultVO listBooks(Integer pageNum,Integer pageSize) {
+    try {
+        List<Book> books = bookService.listBooks(pageNum, pageSize);
+        int count = bookService.getCount();
+        PageVO<List<Book>> pageVO = new PageVO<List<Book>>(count,books);
+
+        return new ResultVO<PageVO>(0,"success",pageVO);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ResultVO<Book>(1,"fail");
+    }
+}
+```
+
+## 3. 《XX商城》设计及实现——用户管理
 
 ### 3.1 后端接口开发
 
